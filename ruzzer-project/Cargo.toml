@@ -1,0 +1,17 @@
+[package]
+name = "ruzzer"
+version = "0.1.0"
+authors = ["akaBase"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargocargo-tree/reference/manifest.html
+
+[dependencies]
+http = "0.2.1"
+ansi_term = "0.12.1"
+rand = "0.7.3"
+reqwest = "0.10.7"
+futures = "0.3.1"
+tokio = {version = "0.2.4", features = ["macros"]}
+lazy_static = "1.4.0"
+chrono = "0.4.15"
