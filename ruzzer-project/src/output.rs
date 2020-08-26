@@ -21,7 +21,7 @@ pub fn help()
     println!("{}", Style::new().paint("ruzzer --url=\"http://example.com/*\" --wordlist=\"wordlist.txt\" --acceptcodes=\"200,210,403\" --output=\"results.txt\" --threads=5"));
 
     println!("{}", Style::new().bold().paint("\nDisclaimer"));
-    println!("{}", Style::new().paint("The Web Fuzzer is provided as is and by using it you agree to take responsibility for your actions while using it."));
+    println!("{}", Style::new().paint("Ruzzer is provided as is and by using it you agree to take responsibility for your actions while using it."));
     std::process::exit(1);
 }
 
