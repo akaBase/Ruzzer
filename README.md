@@ -23,6 +23,19 @@ ruzzer --url="http://example.com/*" --wordlist="wordlist.txt" --acceptcodes="200
 </pre>
 
 ***
+#### Download Built ruzzer 
+Download Link: https://github.com/akaBase/Ruzzer/raw/master/ruzzer
+***
+#### Build ruzzer from source
+Install Rust if it isn't (Required to build but not run built ruzzer): https://www.rust-lang.org/tools/install
+
+
+* git clone https://github.com/akaBase/Ruzzer.git
+* cd Ruzzer/ruzzer-project
+* cargo build --release
+
+Release ruzzer location: target/release/ruzzer
+***
 #### Disclaimer
 Ruzzer is provided as is and by using it you agree to take responsibility for your actions while using it.
 ***
