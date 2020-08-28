@@ -5,8 +5,8 @@ const IGNORECODESARG: [&str; 2] = ["-ic=", "--ignorecodes="];
 const ACCEPTCODESARG: [&str; 2] = ["-ac=", "--acceptcodes="];
 const IGNORESTRINGARG: [&str; 2] = ["-is=", "--ignorestring="];
 const ACCEPTSTRINGARG: [&str; 2] = ["-as=", "--acceptstring="];
-const THREADSARG: [&str; 2] = ["-t=", "--threads"];
-const OUTPUTARG: [&str; 2] = ["-o=", "--output"];
+const THREADSARG: [&str; 2] = ["-t=", "--threads="];
+const OUTPUTARG: [&str; 2] = ["-o=", "--output="];
 const TIMEOUTARG: [&str; 2] = ["-to=", "--timeout="];
 
 #[derive(Debug, PartialEq)]
