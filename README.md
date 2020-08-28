@@ -15,7 +15,7 @@
 
   <div>
     <h3>🌟 Features</h3>
-    <p>🔹 Target specific a position within an URI using an asterisk (*)</p>
+    <p>🔹 Target a specific position within an URI using an asterisk (*)</p>
     <p>🔹 Only output responses with or without specific HTTP codes</p>
     <p>🔹 Only output responses from webpages with or without target strings in the content</p>
     <p>🔹 Fast, Multi-Threaded Fuzzes</p>
