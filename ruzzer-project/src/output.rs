@@ -7,6 +7,7 @@ pub fn help()
     println!("{}", Style::new().fg(Color::Blue).bold().paint("Ruzzer v1.0.0"));
 
     println!("{}", Style::new().bold().paint("\nArguments"));
+    println!("{}", Style::new().paint("-h     --help            Show help"));
     println!("{}", Style::new().paint("-u     --url             Url with an asterisk (*) marking the fuzz position"));
     println!("{}", Style::new().paint("-w     --wordlist        Line seprated wordlist to fuzz target"));
     println!("{}", Style::new().paint("-ac    --acceptcodes     HTTP codes to accept and forward to output"));
