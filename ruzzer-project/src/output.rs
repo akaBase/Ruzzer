@@ -68,6 +68,11 @@ pub fn ok_result(status_code: i32, url: &str)
     println!("[{}] {}", Style::new().fg(Color::Green).bold().paint(status_code.to_string()), Style::new().bold().paint(url));
 }
 
+pub fn results_file_location(output_file: String)
+{
+    println!("\n{} {}", Style::new().fg(Color::Blue).bold().paint("Output: ".to_string()), output_file);
+}
+
 pub fn scan_init(fuzz_params: &FuzzParams)
 {
     let now = Utc::now();

@@ -81,6 +81,8 @@ pub fn write_results_to_file(fuzz_params: FuzzParams)
         let line: String = format!("[{}] {}\n", r.status_code, r.url);
         try_write_to_file(&file, line);
     }
+
+    output::results_file_location(fuzz_params.output);
 }
 
 fn try_write_to_file(mut file: &File, line: String)
