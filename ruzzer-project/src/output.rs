@@ -16,6 +16,7 @@ pub fn help()
     println!("{}", Style::new().paint("-is    --ignorestring    Search content for string and ignore Url if found"));
     println!("{}", Style::new().paint("-to    --timeout         Timeout in seconds to wait for a request  [Default: 3, Range:1-180]"));
     println!("{}", Style::new().paint("-t     --threads         Threads to use [Default: 5, Range:1-100]"));
+    println!("{}", Style::new().paint("-e     --extensions      File Extensions (Requires fuzz position marker (*) at the end of the URL)"));
     println!("{}", Style::new().paint("-o     --output          Output results to a file"));
 
     println!("{}", Style::new().bold().paint("\nExample"));

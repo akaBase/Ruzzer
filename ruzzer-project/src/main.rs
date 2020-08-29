@@ -24,6 +24,7 @@ pub enum FuzzType
 pub struct FuzzParams
 {
     pub url: String,
+    pub url_parts: Vec<String>,
 
     pub words: Vec<String>,
 
@@ -36,7 +37,9 @@ pub struct FuzzParams
 
     pub output: String,
 
-    pub timeout:u64
+    pub timeout:u64,
+
+    pub extensions: Vec<String>
 }
 
 fn main() {
@@ -69,6 +72,7 @@ fn build_fuzz_params() -> FuzzParams
     let mut fuzz_params = FuzzParams
     {
         url: String::new(),
+        url_parts: vec![],
 
         words: vec![],
 
@@ -81,7 +85,9 @@ fn build_fuzz_params() -> FuzzParams
 
         output: String::new(),
 
-        timeout: 3
+        timeout: 3,
+
+        extensions: vec![]
     };
 
     // Get Url
@@ -102,7 +108,18 @@ fn build_fuzz_params() -> FuzzParams
         {
             if url.value.contains('*')
             {
-                fuzz_params.url = url.value;
+                let url_parts: Vec<&str> = url.value.split('*').collect();
+                if url_parts.len() == 2
+                {
+                    for url_part in url_parts
+                    {
+                        fuzz_params.url_parts.push(url_part.to_owned());
+                    }
+                }
+                else
+                {
+                    param_errors.push("Url must contain only one fuzz position asterisk (*)".to_owned())
+                }
             }
             else
             {
@@ -265,6 +282,27 @@ fn build_fuzz_params() -> FuzzParams
         }
     }
 
+
+    // Extensions
+    let extensions_string: CLIarg = get(FuzzArgs::EXTENSIONS);
+    if extensions_string.isset 
+    {
+        if &fuzz_params.url_parts[1] == ""
+        {
+            fuzz_params.extensions = file_extensions_from_string(extensions_string.value);
+            
+            if fuzz_params.extensions.len() == 0
+            {
+                param_errors.push("Extensions is set but no valid entries".to_owned());
+            }
+        }
+        else
+        {
+            param_errors.push("Unable to use file extensions if the fuzz position marker is not at the end of the URL".to_owned())
+        }
+    }
+
+
     if param_errors.len() > 0
     {
         output::errors(param_errors, true);
@@ -295,6 +333,21 @@ fn http_codes_from_string(arg_string:  String) -> Vec<i32>
     }
 
     codes
+}
+
+
+fn file_extensions_from_string(arg_string:  String) -> Vec<String>
+{
+    let mut extensions: Vec<String> = vec![];
+
+    for cs in arg_string.split(',')
+    {
+        let ext = cs.to_owned();
+        println!("{}", ext);
+        extensions.push(cs.to_owned());
+    }
+
+    extensions
 }
 
 fn output_file_check(user_defined_path: String) -> (i32, String)

@@ -89,12 +89,12 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
                 output::ok_result(re.status_code, url);
                 results::add(re.status_code, url);
             }
-            else if fuzz_params.fuzz_type == FuzzType::AcceptCodes && fuzz_params.http_codes.contains(&re.status_code)
+            else if fuzz_params.fuzz_type == FuzzType::AcceptCodes && fuzz_params.http_codes.contains(&re.status_code) && re.status_code != 0
             {
                 output::ok_result(re.status_code, url);
                 results::add(re.status_code, url);
             }
-            else if fuzz_params.fuzz_type == FuzzType::IgnoreCodes && !fuzz_params.http_codes.contains(&re.status_code)
+            else if fuzz_params.fuzz_type == FuzzType::IgnoreCodes && !fuzz_params.http_codes.contains(&re.status_code) && re.status_code != 0
             {
                 output::ok_result(re.status_code, url);
                 results::add(re.status_code, url);
@@ -140,11 +140,16 @@ fn get_status_code(resp: &Response) -> i32
 fn generate_urls(fuzz_params: &FuzzParams) -> Vec<String>
 {
     let mut urls: Vec<String> = vec![];
-    let url_parts: Vec<&str> = fuzz_params.url.split('*').collect();
 
     for word in &fuzz_params.words
     {
-        urls.push(format!("{}{}{}", url_parts[0], word, url_parts[1]));
+        let url: String = format!("{}{}{}", fuzz_params.url_parts[0], word, fuzz_params.url_parts[1]);
+
+        for ext in &fuzz_params.extensions
+        {
+            urls.push(format!("{}.{}", url, ext))
+        }
+        urls.push(url);
     }
 
     urls

@@ -8,6 +8,8 @@ const ACCEPTSTRINGARG: [&str; 2] = ["-as=", "--acceptstring="];
 const THREADSARG: [&str; 2] = ["-t=", "--threads="];
 const OUTPUTARG: [&str; 2] = ["-o=", "--output="];
 const TIMEOUTARG: [&str; 2] = ["-to=", "--timeout="];
+const EXTENSIONARG: [&str; 2] = ["-e=", "--extensions="];
+
 
 #[derive(Debug, PartialEq)]
 pub enum FuzzArgs
@@ -21,7 +23,8 @@ pub enum FuzzArgs
     ACCEPTSTRING,
     THREADS,
     OUTPUT,
-    TIMEOUT
+    TIMEOUT,
+    EXTENSIONS
 }
 
 
@@ -46,6 +49,7 @@ pub fn get(arg: FuzzArgs) -> CLIarg
         FuzzArgs::THREADS => get_arg_value(THREADSARG),
         FuzzArgs::OUTPUT => get_arg_value(OUTPUTARG),
         FuzzArgs::TIMEOUT => get_arg_value(TIMEOUTARG),
+        FuzzArgs::EXTENSIONS => get_arg_value(EXTENSIONARG)
     }
 }
 
