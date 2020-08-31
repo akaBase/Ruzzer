@@ -76,28 +76,31 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
     responses.for_each(|r| {
         async {
 
-            let re = r;
-            let url: &str = re.url.as_str();
+            if !r.error
+            {
+                let re = r;
+                let url: &str = re.url.as_str();
 
-            if fuzz_params.fuzz_type == FuzzType::AcceptString && re.text.contains(&fuzz_params.search_string) 
-            {
-                output::ok_result(re.status_code, url);
-                results::add(re.status_code, url);
-            }
-            else if fuzz_params.fuzz_type == FuzzType::IgnoreString && !re.text.contains(&fuzz_params.search_string) 
-            {
-                output::ok_result(re.status_code, url);
-                results::add(re.status_code, url);
-            }
-            else if fuzz_params.fuzz_type == FuzzType::AcceptCodes && fuzz_params.http_codes.contains(&re.status_code) && re.status_code != 0
-            {
-                output::ok_result(re.status_code, url);
-                results::add(re.status_code, url);
-            }
-            else if fuzz_params.fuzz_type == FuzzType::IgnoreCodes && !fuzz_params.http_codes.contains(&re.status_code) && re.status_code != 0
-            {
-                output::ok_result(re.status_code, url);
-                results::add(re.status_code, url);
+                if fuzz_params.fuzz_type == FuzzType::AcceptString && re.text.contains(&fuzz_params.search_string) 
+                {
+                    output::ok_result(re.status_code, url);
+                    results::add(re.status_code, url);
+                }
+                else if fuzz_params.fuzz_type == FuzzType::IgnoreString && !re.text.contains(&fuzz_params.search_string) 
+                {
+                    output::ok_result(re.status_code, url);
+                    results::add(re.status_code, url);
+                }
+                else if fuzz_params.fuzz_type == FuzzType::AcceptCodes && fuzz_params.http_codes.contains(&re.status_code)
+                {
+                    output::ok_result(re.status_code, url);
+                    results::add(re.status_code, url);
+                }
+                else if fuzz_params.fuzz_type == FuzzType::IgnoreCodes && !fuzz_params.http_codes.contains(&re.status_code)
+                {
+                    output::ok_result(re.status_code, url);
+                    results::add(re.status_code, url);
+                }                
             }
         }
     })
