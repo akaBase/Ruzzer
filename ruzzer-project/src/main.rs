@@ -342,8 +342,6 @@ fn file_extensions_from_string(arg_string:  String) -> Vec<String>
 
     for cs in arg_string.split(',')
     {
-        let ext = cs.to_owned();
-        println!("{}", ext);
         extensions.push(cs.to_owned());
     }
 
