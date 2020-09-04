@@ -42,7 +42,7 @@
 <b>-as    --acceptstring</b>    Search content for string and forward Url if found
 <b>-is    --ignorestring</b>    Search content for string and ignore Url if found
 <b>-to    --timeout</b>         Timeout in seconds to wait for a request  [Default: 3, Range:1-180]
-<b>-t     --threads</b>         Threads to use [Default: 5, Range:1-100]
+<b>-t     --threads</b>         Threads to use [Default: 10, Range:1-100]
 <b>-o     --output</b>          Output results to a file
 <b>-e     --extensions</b>      File Extensions (Requires fuzz position marker (*) at the end of the URL)
 </pre>
