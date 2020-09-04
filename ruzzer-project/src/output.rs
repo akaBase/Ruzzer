@@ -1,6 +1,8 @@
 use ansi_term::{Style, Color};
-use super::{FuzzParams, FuzzType};
 use chrono::{Timelike, Utc};
+use std::io::{self, Write};
+
+use super::{FuzzParams, FuzzType};
 
 pub fn help()
 {
@@ -15,7 +17,7 @@ pub fn help()
     println!("{}", Style::new().paint("-as    --acceptstring    Search content for string and forward Url if found"));
     println!("{}", Style::new().paint("-is    --ignorestring    Search content for string and ignore Url if found"));
     println!("{}", Style::new().paint("-to    --timeout         Timeout in seconds to wait for a request  [Default: 3, Range:1-180]"));
-    println!("{}", Style::new().paint("-t     --threads         Threads to use [Default: 5, Range:1-100]"));
+    println!("{}", Style::new().paint("-t     --threads         Threads to use [Default: 10, Range:1-100]"));
     println!("{}", Style::new().paint("-e     --extensions      File Extensions (Requires fuzz position marker (*) at the end of the URL)"));
     println!("{}", Style::new().paint("-o     --output          Output results to a file"));
 
@@ -61,12 +63,17 @@ pub fn errors(error_messages: Vec<String>, show_help: bool)
 
 pub fn warning(message: String)
 {
-    println!("{}", Style::new().fg(Color::Yellow).paint(message));
+    println!("\r{}", Style::new().fg(Color::Yellow).paint(message));
+}
+
+pub fn info(message: String)
+{
+    println!("\r{}", Style::new().fg(Color::White).bold().paint(message));
 }
 
 pub fn ok_result(status_code: i32, url: &str)
 {
-    println!("[{}] {}", Style::new().fg(Color::Green).bold().paint(status_code.to_string()), Style::new().bold().paint(url));
+    println!("\r[{}] {}", Style::new().fg(Color::Green).bold().paint(status_code.to_string()), Style::new().bold().paint(url));
 }
 
 pub fn results_file_location(output_file: String)
@@ -110,4 +117,19 @@ pub fn scan_init(fuzz_params: &FuzzParams)
             Style::new().fg(Color::Red).bold().paint(format!("{:?} \"{}\"\n", fuzz_params.fuzz_type, fuzz_params.search_string))
         );
     }   
+}
+
+pub fn progress_update(index: i32, total: usize)
+{
+    let mut output = format!("{} {}/{}", 
+        Style::new().fg(Color::Blue).bold().paint("Progress:".to_string()), 
+        Style::new().fg(Color::White).bold().paint(index.to_string()), 
+        Style::new().fg(Color::White).bold().paint(total.to_string())
+    );
+    for _ in output.len()..79
+    {
+        output += " ";
+    }
+    print!("\r{}", output);
+    io::stdout().flush().ok().expect("Could not flush stdout");
 }

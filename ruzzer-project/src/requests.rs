@@ -35,6 +35,11 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
 {
     let urls = generate_urls(&fuzz_params);
 
+    let urls_count: usize = urls.len();
+    let mut responses_count: i32 = 0;
+
+    let string_search: bool = fuzz_params.fuzz_type == FuzzType::AcceptString || fuzz_params.fuzz_type == FuzzType::IgnoreString;
+
     let responses = stream::iter(urls)
         .map(|url| {
             let client = &client;
@@ -48,24 +53,42 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
                     error:false
                 };
 
-                let resp = client.get(url.as_str()).send().await;
-                
-                match resp
+                if string_search
                 {
-                    Ok(resp) => {
-
-                        fuzz_response.status_code = get_status_code(&resp);
-
-                        if fuzz_params.fuzz_type == FuzzType::AcceptString || fuzz_params.fuzz_type == FuzzType::IgnoreString
-                        {
-                            let content_response = get_content(resp).await;
-                            fuzz_response.text = content_response.0;
-                            fuzz_response.error = content_response.1;
+                    let resp = client.head(url.as_str()).send().await;                    
+                    match resp
+                    {
+                        Ok(resp) => {
+    
+                            fuzz_response.status_code = get_status_code(&resp);
+                        },
+                        Err(e) => {
+                            output::warning(format!("{}", e));
+                            fuzz_response.error = true;
                         }
-                    },
-                    Err(e) => {
-                        output::warning(format!("{}", e));
-                        fuzz_response.error = true;
+                    }
+                }
+                else
+                {
+                    let resp = client.get(url.as_str()).send().await;
+
+                    match resp
+                    {
+                        Ok(resp) => {
+    
+                            fuzz_response.status_code = get_status_code(&resp);
+    
+                            if string_search
+                            {
+                                let content_response = get_content(resp).await;
+                                fuzz_response.text = content_response.0;
+                                fuzz_response.error = content_response.1;
+                            }
+                        },
+                        Err(e) => {
+                            output::warning(format!("{}", e));
+                            fuzz_response.error = true;
+                        }
                     }
                 }
                 fuzz_response
@@ -74,8 +97,11 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
         .buffer_unordered(fuzz_params.threads);
 
     responses.for_each(|r| {
-        async {
 
+        responses_count += 1;
+        output::progress_update(responses_count, urls_count);
+
+        async move{
             if !r.error
             {
                 let re = r;
@@ -101,6 +127,10 @@ async fn send_requests(fuzz_params: &FuzzParams, client: Client)
                     output::ok_result(re.status_code, url);
                     results::add(re.status_code, url);
                 }                
+            }
+            else
+            {
+                output::info("Consider reducing threads!".to_owned())
             }
         }
     })

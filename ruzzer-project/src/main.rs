@@ -81,7 +81,7 @@ fn build_fuzz_params() -> FuzzParams
         http_codes: vec![],
         search_string: String::new(),
 
-        threads: 5,
+        threads: 10,
 
         output: String::new(),
 
