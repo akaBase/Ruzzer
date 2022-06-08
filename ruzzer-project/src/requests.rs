@@ -23,7 +23,7 @@ pub fn begin(fuzz_params: &FuzzParams) {
     match client
     {
         Ok(client) => {
-            let mut rt = tokio::runtime::Runtime::new().unwrap();
+            let rt = tokio::runtime::Runtime::new().unwrap();
             let future = send_requests(&fuzz_params, client);
             rt.block_on(future);
         }

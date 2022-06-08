@@ -9,6 +9,7 @@ use arguments::{get, FuzzArgs, CLIarg};
 use http::Uri;
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
+use std::env;
 
 #[derive(Debug, PartialEq)]
 pub enum FuzzType
@@ -43,6 +44,7 @@ pub struct FuzzParams
 }
 
 fn main() {
+    env::set_var("RUST_BACKTRACE", "full");
 
     let help: CLIarg = get(FuzzArgs::HELP);
 
@@ -277,7 +279,7 @@ fn build_fuzz_params() -> FuzzParams
         }
         else
         {
-            let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
+            let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).map(char::from).collect();
             fuzz_params.output = format!("web-fuzzer-results--{}.txt", rand_string).to_owned();
         }
     }
